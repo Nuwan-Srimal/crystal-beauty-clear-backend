@@ -1,21 +1,20 @@
 import express from "express";
 import mongoose from "mongoose";
 import userRouter from "./routes/userRouter.js";
-import jwt from "jsonwebtoken"
+import jwt from "jsonwebtoken";
 import productRouter from "./routes/productRouter.js";
-
 const app = express()
 
 app.use(express.json())
 
 app.use(
     (req,res,next)=>{
+
         let token = req.header("Authorization")
 
-        if(token !=null){
+        if(token != null){
             token = token.replace("Bearer ","")
-            console.log(token)
-            jwt.verify(token, "jwt-loki",
+            jwt.verify(token,"jwt-loki",
                 (err, decoded)=>{
                     if(decoded == null){
                         res.json({
@@ -27,17 +26,18 @@ app.use(
                     }
                 }
             )
+
         }
         next()
     }
 )
 
-const connectionString = "mongodb+srv://admin:123@cluster0.qnd4lep.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+const connectionString = "mongodb+srv://admin:123@cluster0.evybyyh.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
 
 
 mongoose.connect(connectionString).then(
     ()=>{
-        console.log("Database connected")
+        console.log("Database connected Successfully")
     }
 ).catch(
     ()=>{
@@ -47,7 +47,7 @@ mongoose.connect(connectionString).then(
 
 
 
-app.use("/students",studentRouter)
+
 app.use("/users",userRouter)
 app.use("/products", productRouter)
 
