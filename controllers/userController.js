@@ -58,14 +58,17 @@ export function loginUser(req,res){
                         },
                         "jwt-loki"
                     )
+
                     res.json(
                         {
                             message: "Login successful",
                             token: token
                         }
                     )
+
+                    
                 }else{
-                    res.status(401).json(
+                    res.status(500).json(
                         {
                             message: "Invalid password"
                         }
@@ -74,6 +77,8 @@ export function loginUser(req,res){
             }
         }
     )
+
+
 }
 
 export function isAdmin(req){
