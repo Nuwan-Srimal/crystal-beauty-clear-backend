@@ -3,7 +3,13 @@ import mongoose from "mongoose";
 import userRouter from "./routes/userRouter.js";
 import jwt from "jsonwebtoken";
 import productRouter from "./routes/productRouter.js";
+import cors from "cors";
+import dotenv from "dotenv";
+
+dotenv.config();
+
 const app = express()
+app.use(cors())
 
 app.use(express.json())
 
@@ -14,7 +20,7 @@ app.use(
 
         if(token != null){
             token = token.replace("Bearer ","")
-            jwt.verify(token,"jwt-loki",
+            jwt.verify(token, process.env.JWT_LOKI,
                 (err, decoded)=>{
                     if(decoded == null){
                         res.json({
@@ -32,7 +38,7 @@ app.use(
     }
 )
 
-const connectionString = "mongodb+srv://admin:123@cluster0.evybyyh.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+const connectionString = process.env.MONGO_URI
 
 
 mongoose.connect(connectionString).then(
@@ -48,8 +54,8 @@ mongoose.connect(connectionString).then(
 
 
 
-app.use("/users",userRouter)
-app.use("/products", productRouter)
+app.use("/api/users", userRouter)
+app.use("/api/products", productRouter)
 
 
 app.listen(5000, 
