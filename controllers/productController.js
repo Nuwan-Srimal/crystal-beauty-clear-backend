@@ -123,3 +123,26 @@ export async function getProductId(req,res){
         });
     }
 }
+
+export async function getProductsBySearch(req, res) {
+	try {
+		const query = req.params.query;
+
+		const products = await Product.find({
+			$or: [
+				{
+					name: { $regex: query, $options: "i" },
+				},
+				{
+					altNames: { $elemMatch: { $regex: query, $options: "i" } },
+				},
+			],
+		});
+		res.json(products);
+	} catch (err) {
+		console.error(err);
+		res.status(500).json({
+			message: "Failed to search products",
+		});
+	}
+}
